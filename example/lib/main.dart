@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:ya_websocket/ya_websocket.dart';
+import 'package:ya_websocket/main.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,8 +13,9 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
   String _platformVersion = 'Unknown';
+
 
   @override
   void initState() {
@@ -25,11 +26,12 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
+    YaWebsocket websocket = YaWebsocket(this);
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
       platformVersion =
-          await YaWebsocket.platformVersion ?? 'Unknown platform version';
+          await websocket.platformVersion ?? 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -56,5 +58,25 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  @override
+  yaWebsocketDelegateOnClose(String code, String reason, String remote, String? tag) {
+    throw UnimplementedError();
+  }
+
+  @override
+  yaWebsocketDelegateOnError(String localizedMessage, String? message, String? tag) {
+    throw UnimplementedError();
+  }
+
+  @override
+  yaWebsocketDelegateOnMessage(String message, String? tag) {
+    throw UnimplementedError();
+  }
+
+  @override
+  yaWebsocketDelegateOnOpen(String httpStatus, String httpStatusMessage, String? tag) {
+    throw UnimplementedError();
   }
 }
