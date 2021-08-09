@@ -96,7 +96,6 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
                     return Container(
                       child: InkWell(
                         onLongPress: () {
-                          print('object');
                           _textFController.text = _data[i][1].toString();
                         },
                         child: Bubble(
@@ -125,9 +124,6 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
                 color: Colors.blueAccent,
                 child: TextField(
                   controller: _textFController,
-                  onChanged: (value) {
-                    print(value);
-                  },
                   onSubmitted: (value) {
                     setState(() {
                       _data.add([true, value]);

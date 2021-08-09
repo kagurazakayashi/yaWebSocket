@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - Starscream (4.0.4)
+  - ya_websocket (0.0.1):
+    - Flutter
+    - Starscream
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - ya_websocket (from `.symlinks/plugins/ya_websocket/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Starscream
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  ya_websocket:
+    :path: ".symlinks/plugins/ya_websocket/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  ya_websocket: 1467179a3f7e8311af2b5245d314026d2aca24cd
+
+PODFILE CHECKSUM: 324709033fdbc1fa744dac75dde748e9cf475d50
+
+COCOAPODS: 1.10.2
