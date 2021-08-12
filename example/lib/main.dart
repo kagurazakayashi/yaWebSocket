@@ -74,14 +74,23 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
             title: Text(_title),
             actions: [
               IconButton(
-                  onPressed: () async {
-                    if (await isOpen()) {
-                      close();
-                    } else {
-                      reconnect();
-                    }
-                  },
-                  icon: _isConnect ? Icon(Icons.link_off) : Icon(Icons.link))
+                onPressed: () {
+                  _textFController.text = '{"sub setpoint":[[1,2,3],[1,3],1]}';
+                },
+                icon: Icon(Icons.copy),
+              ),
+              IconButton(
+                onPressed: () async {
+                  if (await isOpen()) {
+                    close();
+                  } else {
+                    reconnect();
+                  }
+                },
+                icon: Icon(
+                  _isConnect ? Icons.link_off : Icons.link,
+                ),
+              ),
             ],
           ),
           body: Column(
@@ -220,7 +229,10 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
       String code, String reason, String remote, String? tag) {
     setState(() {
       _isConnect = false;
-      _data.add([false, "连接已被关闭( $remote , $code ) $reason ，请输入新的连接地址或按右上角按钮重新连接到上次的服务器。"]);
+      _data.add([
+        false,
+        "连接已被关闭( $remote , $code ) $reason ，请输入新的连接地址或按右上角按钮重新连接到上次的服务器。"
+      ]);
     });
   }
 
@@ -244,7 +256,8 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
       String httpStatus, String httpStatusMessage, String? tag) {
     setState(() {
       _isConnect = true;
-      _data.add([false, "连接已建立( $httpStatus ): $httpStatusMessage 。请输入要发送的消息。"]);
+      _data
+          .add([false, "连接已建立( $httpStatus ): $httpStatusMessage 。请输入要发送的消息。"]);
     });
   }
 

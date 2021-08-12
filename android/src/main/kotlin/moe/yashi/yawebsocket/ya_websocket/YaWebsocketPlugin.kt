@@ -25,6 +25,7 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
+    var timeout: Int = 10
     private lateinit var _methodChannel: MethodChannel
     private lateinit var _eventChannel: EventChannel
     private var _webSocket: YWebSocket? = null
@@ -64,6 +65,7 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
                 _webSocket!!.tag = tag
             }
             _webSocket!!.connecting()
+            _webSocket!!.connectionLostTimeout = timeout
             _webSocket!!.connect()
 //            client!!.connectBlocking()
             returnVal["status"] = "0"
