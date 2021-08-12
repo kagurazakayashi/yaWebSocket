@@ -34,7 +34,7 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         _methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "ya_websocket_m")
         _methodChannel.setMethodCallHandler(this)
-        _eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,"ya_websocket_e")
+        _eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "ya_websocket_e")
         _eventChannel.setStreamHandler(this)
     }
 
@@ -49,6 +49,18 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
         }
     }
 
+    private fun toResult(@NonNull result: Result, returnVal: HashMap<String, String>? = null) {
+        var rVal = HashMap<String, String>()
+        if (returnVal == null) {
+            rVal["status"] = "-1"
+        } else {
+            rVal = returnVal
+        }
+        Handler(Looper.getMainLooper()).post {
+            result.success(rVal)
+        }
+    }
+
     private fun connect(@NonNull call: MethodCall, @NonNull result: Result) {
         var returnVal = HashMap<String, String>()
         var uri: URI = URI.create(call.argument("uri"))
@@ -56,8 +68,7 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
         try {
             _webSocket = YWebSocket(uri)
             if (_webSocket == null || _eventChannelSink == null || _webSocket!!.isOpen) {
-                returnVal["status"] = "-1"
-                result.success(returnVal)
+                this.toResult(result)
                 return
             }
             _webSocket!!.eventChannelSink = _eventChannelSink!!
@@ -69,14 +80,12 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
             _webSocket!!.connect()
 //            client!!.connectBlocking()
             returnVal["status"] = "0"
-            Handler(Looper.getMainLooper()).post {
-                result.success(returnVal)
-            }
+            toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
             returnVal["info"] = e.localizedMessage
             // e.printStackTrace()
-            result.success(returnVal)
+            toResult(result, returnVal)
         }
     }
 
@@ -84,45 +93,42 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
         var returnVal = HashMap<String, String>()
         var text: String? = call.argument("text");
         if (_webSocket == null || !_webSocket!!.isOpen) {
-            returnVal["status"] = "-1"
-            result.success(returnVal)
+            toResult(result)
             return
         }
         try {
             _webSocket!!.send(text)
             returnVal["status"] = "0"
-            result.success(returnVal)
+            toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
             returnVal["info"] = e.localizedMessage
-            result.success(returnVal)
+            toResult(result, returnVal)
         }
     }
 
     private fun close(@NonNull call: MethodCall, @NonNull result: Result) {
         var returnVal = HashMap<String, String>()
         if (_webSocket == null || !_webSocket!!.isOpen) {
-            returnVal["status"] = "-1"
-            result.success(returnVal)
+            toResult(result)
             return
         }
         try {
             _webSocket!!.close()
             _webSocket = null
             returnVal["status"] = "0"
-            result.success(returnVal)
+            toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
             returnVal["info"] = e.localizedMessage
-            result.success(returnVal)
+            toResult(result, returnVal)
         }
     }
 
     private fun isOpen(@NonNull call: MethodCall, @NonNull result: Result) {
         var returnVal = HashMap<String, String>()
         if (_webSocket == null) {
-            returnVal["status"] = "-1"
-            result.success(returnVal)
+            toResult(result)
             return
         }
         try {
@@ -131,11 +137,11 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
             } else {
                 returnVal["status"] = "0"
             }
-            result.success(returnVal)
+            toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
             returnVal["info"] = e.localizedMessage
-            result.success(returnVal)
+            toResult(result, returnVal)
         }
     }
 

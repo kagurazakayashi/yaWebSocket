@@ -47,65 +47,54 @@ class YaWebSocket: WebSocketDelegate {
         }
     }
     
-    func connecting() {
-        var returnVal : [String:String] = ["id":"onConnecting"]
+    func eventSuccess(returnVal : [String:String]) {
+        var rVal : [String:String] = returnVal
         if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
+            rVal["tag"] = tag
         }
-        isConnect = false
         DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
+            self.eventChannelSink(rVal)
         }
+    }
+    
+    func connecting() {
+        let returnVal : [String:String] = ["id":"onConnecting"]
+        isConnect = false
+        self.eventSuccess(returnVal: returnVal)
     }
     
     func onOpen(handshakedata:[String: String]) {
-        var returnVal : [String:String] = ["id":"onOpen"]
-        if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
-        }
-        returnVal["httpStatus"] = "000"
-        returnVal["httpStatusMessage"] = "000"
+        let returnVal : [String:String] = [
+            "id":"onOpen",
+            "httpStatus":"101",
+            "httpStatusMessage":"Switching Protocols"
+        ]
         isConnect = true
-        DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
-        }
+        self.eventSuccess(returnVal: returnVal)
     }
     
     func onMessage(message:String) {
-        var returnVal : [String:String] = [
+        let returnVal : [String:String] = [
             "id":"onMessage",
             "message":message
         ]
-        if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
-        }
         isConnect = true
-        DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
-        }
+        self.eventSuccess(returnVal: returnVal)
     }
     
     func onClose(code:Int, reason:String, remote:Bool)  {
-        var returnVal : [String:String] = [
+        let returnVal : [String:String] = [
             "id":"onClose",
             "code":String(code),
             "reason":reason,
             "remote":String(remote)
         ]
-        if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
-        }
         isConnect = false
-        DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
-        }
+        self.eventSuccess(returnVal: returnVal)
     }
     
     func onError(ex:Error?) {
         var returnVal : [String:String] = ["id":"onError"]
-        if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
-        }
         if (ex != nil) {
             returnVal["message"] = String(describing: ex)
             returnVal["localizedMessage"] = String(describing: ex?.localizedDescription)
@@ -113,20 +102,13 @@ class YaWebSocket: WebSocketDelegate {
             returnVal["localizedMessage"] = ""
         }
         isConnect = false
-        DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
-        }
+        self.eventSuccess(returnVal: returnVal)
     }
     
     func onCancelled() {
-        var returnVal : [String:String] = ["id":"onCancelled"]
-        if (!self.tag.isEmpty) {
-            returnVal["tag"] = tag
-        }
+        let returnVal : [String:String] = ["id":"onCancelled"]
         isConnect = false
-        DispatchQueue.main.async {
-            self.eventChannelSink(returnVal)
-        }
+        self.eventSuccess(returnVal: returnVal)
     }
     
     // MARK: WebSocketDelegate
@@ -144,6 +126,10 @@ class YaWebSocket: WebSocketDelegate {
             onClose(code: 0, reason: "", remote: false)
         case .error(let error):
             onError(ex: error)
+        // case .viabilityChanged(_): // let isChanged
+        // onClose(code: -1, reason: "viabilityChanged", remote: false)
+        case .reconnectSuggested(_): // let isSuggested
+            onClose(code: 1006, reason: "reconnectSuggested", remote: false)
         default:
             print("event?")
             print(event)
