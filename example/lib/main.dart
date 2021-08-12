@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 
-import 'package:ya_websocket/main.dart';
+import 'package:ya_websocket/ya_websocket.dart';
 
 import 'package:bubble/bubble.dart';
 
@@ -25,6 +24,7 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
   bool _isConnect = false;
   late YaWebsocket _websocket;
   String _title = "点按屏幕下方蓝色区域输入";
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -64,91 +64,6 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
     //   _platformVersion = platformVersion;
     //   // child: Text('Running on: $_platformVersion\n'),
     // });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text(_title),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  _textFController.text = '{"sub setpoint":[[1,2,3],[1,3],1]}';
-                },
-                icon: Icon(Icons.copy),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (await isOpen()) {
-                    close();
-                  } else {
-                    reconnect();
-                  }
-                },
-                icon: Icon(
-                  _isConnect ? Icons.link_off : Icons.link,
-                ),
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemCount: _data.length, //data.length*2-1,
-                  itemBuilder: (context, i) {
-                    // if (i.isOdd) return new Divider();
-                    // final index = i ~/ 2;
-                    return Container(
-                      child: InkWell(
-                        onLongPress: () {
-                          _textFController.text = _data[i][1].toString();
-                        },
-                        child: Bubble(
-                          margin: BubbleEdges.only(top: 10),
-                          alignment: _data[i][0]
-                              ? Alignment.topRight
-                              : Alignment.topLeft,
-                          nip: _data[i][0]
-                              ? BubbleNip.rightTop
-                              : BubbleNip.leftTop,
-                          color: _data[i][0]
-                              ? Color.fromRGBO(225, 255, 199, 1.0)
-                              : Color.fromRGBO(212, 234, 244, 1.0),
-                          child: Text(_data[i][1],
-                              textAlign: _data[i][0]
-                                  ? TextAlign.right
-                                  : TextAlign.left),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                height: 50,
-                color: Colors.blueAccent,
-                child: TextField(
-                  controller: _textFController,
-                  onSubmitted: (value) {
-                    setState(() {
-                      _data.add([true, value]);
-                    });
-                    if (value.substring(0, 5) == "ws://") {
-                      connect(value, _webSocketTAG);
-                    } else {
-                      send(value);
-                    }
-                    _textFController.text = "";
-                  },
-                ),
-              ),
-            ],
-          )),
-    );
   }
 
   Future<bool> send(String text) async {
@@ -215,15 +130,6 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
     return isOK;
   }
 
-  Future<bool> isOpen() async {
-    bool isLinked = false;
-    Map? openInfo = await _websocket.isOpen();
-    if (openInfo != null && openInfo["status"] == "1") {
-      isLinked = true;
-    }
-    return isLinked;
-  }
-
   @override
   yaWebsocketDelegateOnClose(
       String code, String reason, String remote, String? tag) {
@@ -266,5 +172,143 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
     setState(() {
       _data.add([false, "正在连接 $tag ($_webSocketURI) ，请不要进行其他操作。"]);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_data.length > 0 &&
+        _scrollController.hasClients &&
+        _scrollController.position.maxScrollExtent > _scrollController.offset) {
+      // print("================");
+      // print(_scrollController.position.maxScrollExtent);
+      // print(_scrollController.offset);
+      // print(_scrollController.position);
+      // print("================");
+      Timer(
+        Duration(milliseconds: 500),
+        () => _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+      );
+    }
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(_title),
+          actions: [
+            IconButton(
+              onPressed: () {
+                _textFController.text = 'ws://192.168.1.46:8866/chat?user_id=1';
+              },
+              icon: Icon(Icons.copy),
+            ),
+            IconButton(
+              onPressed: () {
+                _textFController.text = '{"user_id":2,"data":"haha"}';
+                // _textFController.text = '{"sub setpoint":[[1,2,3],[1,3],1]}';
+              },
+              icon: Icon(Icons.copy),
+            ),
+            IconButton(
+              onPressed: () async {
+                if (await _websocket.isOpen) {
+                  close();
+                } else {
+                  reconnect();
+                }
+              },
+              icon: Icon(
+                _isConnect ? Icons.link_off : Icons.link,
+              ),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16.0),
+                itemCount: _data.length, //data.length*2-1,
+                itemBuilder: (context, i) {
+                  // if (i.isOdd) return new Divider();
+                  // final index = i ~/ 2;
+                  return Container(
+                    child: InkWell(
+                      onLongPress: () {
+                        _textFController.text = _data[i][1].toString();
+                      },
+                      child: Bubble(
+                        margin: BubbleEdges.only(top: 10),
+                        alignment: _data[i][0]
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        nip: _data[i][0]
+                            ? BubbleNip.rightBottom
+                            : BubbleNip.leftBottom,
+                        color: _data[i][0]
+                            ? Color.fromRGBO(225, 255, 199, 1.0)
+                            : Color.fromRGBO(212, 234, 244, 1.0),
+                        child: Text(
+                          _data[i][1],
+                          textAlign:
+                              _data[i][0] ? TextAlign.right : TextAlign.left,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Container(
+              height: 50,
+              color: Colors.deepOrange,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _textFController,
+                      onSubmitted: (value) {
+                        setState(() {
+                          _data.add([true, value]);
+                        });
+                        if (value.length >= 5 &&
+                            value.substring(0, 5) == "ws://") {
+                          connect(value, _webSocketTAG);
+                        } else {
+                          send(value);
+                        }
+                        _textFController.text = "";
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      String value = _textFController.text;
+                      setState(() {
+                        _data.add([true, value]);
+                      });
+                      if (value.length >= 5 &&
+                          value.substring(0, 5) == "ws://") {
+                        connect(value, _webSocketTAG);
+                      } else {
+                        send(value);
+                      }
+                      _textFController.text = "";
+                    },
+                    icon: Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
