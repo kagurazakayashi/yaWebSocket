@@ -56,9 +56,13 @@ public class SwiftYaWebsocketPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             return
         }
         webSocket = YaWebSocket(uri: url, eventSink: eventChannelSink!)
-        let tag:String? = args["tag"]
-        if (tag != nil) {
-            webSocket!.tag = tag!
+        if (args.keys.contains("timeout")) {
+            let timeStr:String = args["timeout"]!
+            webSocket!.timeout = TimeInterval(timeStr)!
+        }
+        if (args.keys.contains("tag")) {
+            let tag:String = args["tag"]!
+            webSocket!.tag = tag
         }
         webSocket!.connecting()
         webSocket!.connect()

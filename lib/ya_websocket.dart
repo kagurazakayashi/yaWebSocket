@@ -108,11 +108,11 @@ class YaWebsocket {
   /// String [uri] 连接地址
   ///
   /// String? [tag] 此连接的自定义标记
-  Future<Map?> connect(String uri, String? tag) async {
+  Future<Map?> connect(String uri, String toTAG, {String tag="", String timeout="10"}) async {
     _uri = uri;
     _tag = tag;
-    final Map? info = await _methodChannel
-        .invokeMethod('connect', {'uri': uri, 'tag': tag ?? ""});
+    final Map? info = await _methodChannel.invokeMethod(
+        'connect', {'uri': uri, 'timeout': timeout, 'tag': tag});
     // info: Map<String, String>
     //   Keys: status(-1/0), info?
     return info;
