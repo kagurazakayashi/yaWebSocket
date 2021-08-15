@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
       _title = toURI;
       _data.add([false, "现在开始尝试连接 $toURI ..."]);
     });
-    Map? info = await _websocket.connect(toURI, toTAG);
+    Map? info = await _websocket.connect(toURI, tag: toTAG);
     if (info!["status"] == "-1") {
       setState(() {
         _data.add(
