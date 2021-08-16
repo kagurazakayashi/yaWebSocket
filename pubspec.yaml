@@ -1,7 +1,7 @@
 name: ya_websocket
-description: A new flutter plugin project.
-version: 0.0.1
-homepage:
+description: 一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。
+version: 1.0.0
+homepage: https://github.com/kagurazakayashi/yaWebSocket
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

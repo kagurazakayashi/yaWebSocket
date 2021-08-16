@@ -31,20 +31,20 @@ class YaWebSocket: WebSocketDelegate {
         socket.write(string: text)
     }
     
-    func connect(sw:Bool = true) {
-        if (sw) {
-            socket.connect()
-            timeoutTimer = Timer.scheduledTimer(withTimeInterval: timeout+0.1, repeats: false) { timer in
-                if (self.isConnect == false) {
-                    self.socket.disconnect()
-                    self.onError(ex: URLError(URLError.Code.timedOut))
-                    self.onClose(code: -1, reason: "", remote: false)
-                }
-                timer.invalidate()
+    func connect() {
+        socket.connect()
+        timeoutTimer = Timer.scheduledTimer(withTimeInterval: timeout+0.1, repeats: false) { timer in
+            if (self.isConnect == false) {
+                self.socket.disconnect()
+                self.onError(ex: URLError(URLError.Code.timedOut))
+                self.onClose(code: -1, reason: "", remote: false)
             }
-        } else {
-            socket.disconnect()
+            timer.invalidate()
         }
+    }
+    
+    func disconnect() {
+        socket.disconnect()
     }
     
     func eventSuccess(returnVal : [String:String]) {

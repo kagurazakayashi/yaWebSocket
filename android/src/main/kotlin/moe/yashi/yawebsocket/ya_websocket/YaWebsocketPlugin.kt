@@ -113,30 +113,25 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
 
     private fun close(@NonNull call: MethodCall, @NonNull result: Result) {
         var returnVal = HashMap<String, String>()
-        if (_webSocket == null || !_webSocket!!.isOpen) {
-            toResult(result)
-            return
+        if (_webSocket != null || !_webSocket!!.isOpen) {
+            try {
+                _webSocket!!.close()
+            } catch (e: Exception) {
+                returnVal["status"] = "-1"
+                returnVal["info"] = e.localizedMessage
+                toResult(result, returnVal)
+                return
+            }
         }
-        try {
-            _webSocket!!.close()
-            _webSocket = null
-            returnVal["status"] = "0"
-            toResult(result, returnVal)
-        } catch (e: Exception) {
-            returnVal["status"] = "-1"
-            returnVal["info"] = e.localizedMessage
-            toResult(result, returnVal)
-        }
+        _webSocket = null
+        returnVal["status"] = "0"
+        toResult(result, returnVal)
     }
 
     private fun isOpen(@NonNull call: MethodCall, @NonNull result: Result) {
         var returnVal = HashMap<String, String>()
-        if (_webSocket == null) {
-            toResult(result)
-            return
-        }
         try {
-            if (_webSocket!!.isOpen) {
+            if (_webSocket != null && _webSocket!!.isOpen) {
                 returnVal["status"] = "1"
             } else {
                 returnVal["status"] = "0"

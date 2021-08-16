@@ -75,17 +75,24 @@ public class SwiftYaWebsocketPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             toResult(result: result)
             return
         }
+        if (webSocket == nil) {
+            toResult(result: result)
+            return
+        }
         webSocket!.socket.write(string: text);
         toResult(result: result, returnVal: ["status":"0"])
     }
     
     func close(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        webSocket!.connect(sw: false)
+        if (webSocket != nil) {
+            webSocket!.disconnect()
+            webSocket = nil
+        }
         toResult(result: result, returnVal: ["status":"0"])
     }
     
     func isOpen(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if (webSocket!.isConnect == true) {
+        if (webSocket != nil && webSocket!.isConnect == true) {
             toResult(result: result, returnVal: ["status":"1"])
         } else {
             toResult(result: result, returnVal: ["status":"0"])

@@ -108,6 +108,8 @@ class YaWebsocket {
   /// String [uri] 连接地址
   ///
   /// String? [tag] 此连接的自定义标记
+  ///
+  /// String? [timeout] 超时时间（秒）
   Future<Map?> connect(String uri,
       {String tag = "", String timeout = "10"}) async {
     _uri = uri;
@@ -148,6 +150,7 @@ class YaWebsocket {
     return false;
   }
 
+  /// 获取操作系统版本信息
   Future<String?> get platformVersion async {
     final String? version =
         await _methodChannel.invokeMethod('getPlatformVersion');
