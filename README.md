@@ -1,3 +1,4 @@
+![](example\android\app\src\main\res\mipmap-mdpi\ic_launcher_foreground.png)
 # ya_websocket
 
 一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。
@@ -17,7 +18,7 @@
 
 ## 使用
 
-1. 导入包： `import 'package:ya_websocket/main.dart';`
+1. 导入包: `import 'package:ya_websocket/main.dart';`
 2. 在需要的类中实现接口 `class ... implements YaWebsocketDelegate`，实现以下接口：
   - 已连接时
     - `yaWebsocketDelegateOnOpen(String httpStatus, String httpStatusMessage, String? tag);`
@@ -34,7 +35,25 @@
   - 连接发生错误时 (Android 和 iOS 返回信息可能有区别)
     - `yaWebsocketDelegateOnError(String localizedMessage, String? message, String? tag);`
     - 参数说明：本地化描述文本，描述文本，自定义标记
-3. 创建对象： `YaWebsocket websocket = YaWebsocket();`
-4. 指定接口实现类： 
+3. 创建对象: `YaWebsocket websocket = YaWebsocket();`
+4. 指定接口实现类: `_websocket.delegate = this;`
+5. 开始连接: `websocket.connect(uri, tag: tag);`
+  - `uri`: Websocket 的连接地址，以 `ws://` 开头。
+  - `tag`: 可选标签，可以输入任意字符串，库调用接口返回时，会带上它。
+6. 请等待接口收到 `yaWebsocketDelegateOnOpen` 或 `yaWebsocketDelegateOnClose` ，进行处理后再进行下一步。
+7. 发送数据: `websocket.send(text);`
+  - `text`: 要发送的字符串
+8. 断开连接: `websocket.close();`
 
-TODO
+## 另请参阅
+
+- [iOS 示例程序](example/ios)
+- [Android 示例程序](example/android)
+- [dartdoc](doc/api/index.html)
+- [更新日志](CHANGELOG.md)
+
+## 许可 LICENSE
+- [Code License](LICENSE)
+- [Icon License](https://unsplash.com/license) : Bradley Jasper Ybanez
+- [Java-WebSocket License](https://github.com/TooTallNate/Java-WebSocket/blob/master/LICENSE)
+- [Starscream License](https://github.com/daltoniam/Starscream/blob/master/LICENSE)

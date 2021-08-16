@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 0.42.0">
+  <meta name="description" content="ya_websocket API docs, for the Dart programming language.">
+  <title>ya_websocket - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  
+</head>
+
+
+<body data-base-href=""
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/kagurazakayashi/yaWebSocket">ya_websocket package</a></li>
+  </ol>
+  <div class="self-name">ya_websocket</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="https://github.com/kagurazakayashi/yaWebSocket">ya_websocket package</a></li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">ya_websocket</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="ya_websocket/ya_websocket-library.html">ya_websocket</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="ya_websocket">ya_websocket</h1>
+<p>一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。</p>
+<table><thead><tr><th>平 台</th><th>Flutter 插件语言</th><th>原生端使用的库</th><th>库版本</th><th>库使用的语言</th></tr></thead><tbody><tr><td>iOS</td><td>Kotlin</td><td><a href="https://github.com/TooTallNate/Java-WebSocket">Java-WebSocket</a></td><td>1.5.2</td><td>Java</td></tr><tr><td>Android</td><td>Swift</td><td><a href="https://github.com/daltoniam/Starscream">Starscream</a></td><td>4.0.4</td><td>Swift</td></tr></tbody></table>
+<h2 id="">系统版本要求</h2>
+<table><thead><tr><th>平 台</th><th>可运行最低版本</th><th>推荐最低版本</th></tr></thead><tbody><tr><td>Flutter</td><td>2</td><td>2.2.3</td></tr><tr><td>iOS</td><td>10</td><td>14</td></tr><tr><td>Android</td><td>4.1</td><td>11</td></tr></tbody></table>
+<h2 id="-2">使用</h2>
+<ol>
+<li>导入包: <code>import 'package:ya_websocket/main.dart';</code></li>
+<li>在需要的类中实现接口 <code>class ... implements YaWebsocketDelegate</code>，实现以下接口：</li>
+</ol>
+<ul>
+<li>已连接时
+<ul>
+<li><code>yaWebsocketDelegateOnOpen(String httpStatus, String httpStatusMessage, String? tag);</code></li>
+<li>参数说明：HTTP 状态码，状态描述文本，自定义标记</li>
+</ul>
+</li>
+<li>开始尝试连接时
+<ul>
+<li><code>yaWebsocketDelegateOnConnecting(String? tag);</code></li>
+<li>参数说明：自定义标记</li>
+</ul>
+</li>
+<li>收到信息时
+<ul>
+<li><code>yaWebsocketDelegateOnMessage(String message, String? tag);</code></li>
+<li>参数说明：信息内容，自定义标记</li>
+</ul>
+</li>
+<li>连接关闭时 (Android 和 iOS 返回信息可能有区别)
+<ul>
+<li><code>yaWebsocketDelegateOnClose(String code, String reason, String remote, String? tag);</code></li>
+<li>参数说明：代码，描述文本，是否由远程关闭，自定义标记</li>
+</ul>
+</li>
+<li>连接发生错误时 (Android 和 iOS 返回信息可能有区别)
+<ul>
+<li><code>yaWebsocketDelegateOnError(String localizedMessage, String? message, String? tag);</code></li>
+<li>参数说明：本地化描述文本，描述文本，自定义标记</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>创建对象: <code>YaWebsocket websocket = YaWebsocket();</code></li>
+<li>指定接口实现类: <code>_websocket.delegate = this;</code></li>
+<li>开始连接: <code>websocket.connect(uri, tag: tag);</code></li>
+</ol>
+<ul>
+<li><code>uri</code>: Websocket 的连接地址，以 <code>ws://</code> 开头。</li>
+<li><code>tag</code>: 可选标签，可以输入任意字符串，库调用接口返回时，会带上它。</li>
+</ul>
+<ol start="6">
+<li>请等待接口收到 <code>yaWebsocketDelegateOnOpen</code> 或 <code>yaWebsocketDelegateOnClose</code> ，进行处理后再进行下一步。</li>
+<li>发送数据: <code>websocket.send(text);</code></li>
+</ol>
+<ul>
+<li><code>text</code>: 要发送的字符串</li>
+</ul>
+<ol start="8">
+<li>断开连接: <code>websocket.close();</code></li>
+</ol>
+<p>具体用法请参见示例代码。</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="ya_websocket">
+  <span class="name"><a href="ya_websocket/ya_websocket-library.html">ya_websocket</a></span> 
+
+</dt>
+<dd> 
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    ya_websocket
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+
+</body>
+
+</html>
+
