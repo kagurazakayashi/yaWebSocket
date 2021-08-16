@@ -1,5 +1,5 @@
 name: ya_websocket
-description: 一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。
+description: Flutter plugin for WebSocket communication using native libraries on iOS and Android.
 version: 1.0.0
 homepage: https://github.com/kagurazakayashi/yaWebSocket
 
