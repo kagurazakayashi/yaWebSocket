@@ -9,10 +9,10 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
 
 ## 感谢这些好用的库 | Acknowledgements
 
-|  平 台  | Flutter 插件语言 | 原生端使用的库 | 库版本 | 库使用的语言 |
-| ------- | ---------------- | -------------- | ------ | ------------ |
-| iOS     |      Kotlin      |[Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)| 1.5.2  |    Java      |
-| Android |      Swift       |   [Starscream](https://github.com/daltoniam/Starscream)   | 4.0.4  |    Swift     |
+|  平 台  | Flutter 插件语言 | 原生端使用的库  | 库版本 | 库使用的语言 |
+| ------- | ---------------- | --------------- | ------ | ------------ |
+| iOS     |      Kotlin      | [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket) | 1.5.2  |    Java      |
+| Android |      Swift       | [Starscream](https://github.com/daltoniam/Starscream)    | 4.0.4  |    Swift     |
 
 ## 系统版本要求 | Supported platforms
 
@@ -130,6 +130,6 @@ DEMO 演示了 连接、发送、接收、断开、重新连接 的过程。
 
 ## 许可 | LICENSE
 - [Code License](LICENSE)
-- [Icon License](https://unsplash.com/license) : Bradley Jasper Ybanez
+- [Icon Clip Art License](http://www.apache.org/licenses/LICENSE-2.0.txt)
 - [Java-WebSocket License](https://github.com/TooTallNate/Java-WebSocket/blob/master/LICENSE)
 - [Starscream License](https://github.com/daltoniam/Starscream/blob/master/LICENSE)
