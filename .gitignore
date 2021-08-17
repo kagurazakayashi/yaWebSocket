@@ -7,3 +7,4 @@
 build/
 
 .idea
+doc/api/static-assets/favicon.png

@@ -63,12 +63,41 @@
   <div id="dartdoc-main-content" class="main-content">
       
 <section class="desc markdown">
-  <h1 id="ya_websocket">ya_websocket</h1>
+  <p><img src="example/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png" alt=""></p>
+<h1 id="ya_websocket">ya_websocket</h1>
 <p>一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。</p>
+<p>Flutter plugin for WebSocket communication using native libraries on iOS and Android.</p>
+<h2 id="--acknowledgements">感谢这些好用的库 | Acknowledgements</h2>
 <table><thead><tr><th>平 台</th><th>Flutter 插件语言</th><th>原生端使用的库</th><th>库版本</th><th>库使用的语言</th></tr></thead><tbody><tr><td>iOS</td><td>Kotlin</td><td><a href="https://github.com/TooTallNate/Java-WebSocket">Java-WebSocket</a></td><td>1.5.2</td><td>Java</td></tr><tr><td>Android</td><td>Swift</td><td><a href="https://github.com/daltoniam/Starscream">Starscream</a></td><td>4.0.4</td><td>Swift</td></tr></tbody></table>
-<h2 id="">系统版本要求</h2>
+<h2 id="--supported-platforms">系统版本要求 | Supported platforms</h2>
 <table><thead><tr><th>平 台</th><th>可运行最低版本</th><th>推荐最低版本</th></tr></thead><tbody><tr><td>Flutter</td><td>2</td><td>2.2.3</td></tr><tr><td>iOS</td><td>10</td><td>14</td></tr><tr><td>Android</td><td>4.1</td><td>11</td></tr></tbody></table>
-<h2 id="-2">使用</h2>
+<p>在使用本插件前，请先将 APP 的适用版本设置为「可运行最低版本」之上。</p>
+<h2 id="--installing">引入 | Installing</h2>
+<ul>
+<li>如果您准备使用 release 发布版本：
+<ul>
+<li>在项目目录中，运行 <code>flutter pub add ya_websocket</code> 。</li>
+<li>运行后，您项目中 <code>pubspec.yaml</code> 中的 <code>dependencies:</code> 节会自动添加一行代码（并自动运行 <code>dart pub get</code>） ：</li>
+</ul>
+</li>
+</ul>
+<pre class="language-dart"><code>  ya_websocket: ^(使用的版本号,你也可以修改它)
+</code></pre>
+<ul>
+<li>如果您准备使用 main 主线版本，请添加：</li>
+</ul>
+<ol>
+<li>编辑您项目中的文件 <code>pubspec.yaml</code>，在 <code>dependencies:</code> 节添加以下代码：</li>
+</ol>
+<pre class="language-dart"><code>  ya_websocket:
+    git:
+      url: git://github.com/kagurazakayashi/yaWebSocket.git
+      ref: main
+</code></pre>
+<ol start="2">
+<li>保存后，在项目目录中运行 <code>flutter pub get</code> .</li>
+</ol>
+<h2 id="--usage">使用 | Usage</h2>
 <ol>
 <li>导入包: <code>import 'package:ya_websocket/main.dart';</code></li>
 <li>在需要的类中实现接口 <code>class ... implements YaWebsocketDelegate</code>，实现以下接口：</li>
@@ -77,31 +106,59 @@
 <li>已连接时
 <ul>
 <li><code>yaWebsocketDelegateOnOpen(String httpStatus, String httpStatusMessage, String? tag);</code></li>
-<li>参数说明：HTTP 状态码，状态描述文本，自定义标记</li>
+<li>参数:
+<ul>
+<li><code>httpStatus</code>: HTTP 状态码</li>
+<li><code>httpStatusMessage</code>: 状态描述文本</li>
+<li><code>tag</code>: 自定义标记</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>开始尝试连接时
 <ul>
 <li><code>yaWebsocketDelegateOnConnecting(String? tag);</code></li>
-<li>参数说明：自定义标记</li>
+<li>参数:
+<ul>
+<li><code>tag</code>: 自定义标记</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>收到信息时
 <ul>
 <li><code>yaWebsocketDelegateOnMessage(String message, String? tag);</code></li>
-<li>参数说明：信息内容，自定义标记</li>
+<li>参数:
+<ul>
+<li><code>message</code>: 信息内容</li>
+<li><code>tag</code>: 自定义标记</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>连接关闭时 (Android 和 iOS 返回信息可能有区别)
 <ul>
 <li><code>yaWebsocketDelegateOnClose(String code, String reason, String remote, String? tag);</code></li>
-<li>参数说明：代码，描述文本，是否由远程关闭，自定义标记</li>
+<li>参数:
+<ul>
+<li><code>code</code>: 状态代码</li>
+<li><code>reason</code>: 描述文本</li>
+<li><code>remote</code>: 是否由远程关闭</li>
+<li><code>tag</code>: 自定义标记</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>连接发生错误时 (Android 和 iOS 返回信息可能有区别)
 <ul>
 <li><code>yaWebsocketDelegateOnError(String localizedMessage, String? message, String? tag);</code></li>
-<li>参数说明：本地化描述文本，描述文本，自定义标记</li>
+<li>参数:
+<ul>
+<li><code>localizedMessage</code>: 本地化描述文本</li>
+<li><code>message</code>: 描述文本</li>
+<li><code>tag</code>: 自定义标记</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -111,20 +168,97 @@
 <li>开始连接: <code>websocket.connect(uri, tag: tag);</code></li>
 </ol>
 <ul>
+<li>参数:
+<ul>
 <li><code>uri</code>: Websocket 的连接地址，以 <code>ws://</code> 开头。</li>
 <li><code>tag</code>: 可选标签，可以输入任意字符串，库调用接口返回时，会带上它。</li>
 </ul>
+</li>
+<li>返回值（字符串字典）:
+<ul>
+<li><code>status</code>:
+<ul>
+<li><code>0</code>: 现在开始连接，请等待接口收到 <code>yaWebsocketDelegateOnOpen</code> 或 <code>yaWebsocketDelegateOnClose</code> 调用后再进行下一步。</li>
+<li><code>-1</code>: 未能开始连接</li>
+</ul>
+</li>
+<li><code>info</code>: （可选）如果未能开始连接，可能提供此错误信息描述</li>
+</ul>
+</li>
+</ul>
 <ol start="6">
-<li>请等待接口收到 <code>yaWebsocketDelegateOnOpen</code> 或 <code>yaWebsocketDelegateOnClose</code> ，进行处理后再进行下一步。</li>
+<li>检查是否连接 <code>websocket.isOpen();</code></li>
+</ol>
+<ul>
+<li>返回值（字符串字典）:
+<ul>
+<li><code>status</code>:
+<ul>
+<li><code>1</code>: 已连接</li>
+<li><code>0</code>: 未连接</li>
+<li><code>-1</code>: 未能查询</li>
+</ul>
+</li>
+<li><code>info</code>: （可选）如果未能查询，可能提供此错误信息描述</li>
+</ul>
+</li>
+</ul>
+<ol start="7">
 <li>发送数据: <code>websocket.send(text);</code></li>
 </ol>
 <ul>
+<li>参数:
+<ul>
 <li><code>text</code>: 要发送的字符串</li>
+</ul>
+</li>
+<li>返回值（字符串字典）:
+<ul>
+<li><code>status</code>:
+<ul>
+<li><code>0</code>: 已发送</li>
+<li><code>-1</code>: 未发送</li>
+</ul>
+</li>
+<li><code>info</code>: （可选）如果未能发送，可能提供此错误信息描述</li>
+</ul>
+</li>
 </ul>
 <ol start="8">
 <li>断开连接: <code>websocket.close();</code></li>
 </ol>
-<p>具体用法请参见示例代码。</p>
+<ul>
+<li>返回值（字符串字典）:
+<ul>
+<li><code>status</code>:
+<ul>
+<li><code>0</code>: 关闭成功或已经处于关闭状态，关闭成功接口将收到 <code>yaWebsocketDelegateOnClose</code> 调用。</li>
+<li><code>-1</code>: 遇到问题</li>
+</ul>
+</li>
+<li><code>info</code>: （可选）如果遇到问题，可能提供此错误信息描述</li>
+</ul>
+</li>
+</ul>
+<p><strong>注</strong>: 执行 <code>websocket.*</code> 时会立即有返回值，该返回值通常只表示是否成功开始执行。真正的运行结果状态回调在 <code>YaWebsocketDelegate</code> 。</p>
+<h2 id="--example-app">示例程序 | Example app</h2>
+<p>DEMO 演示了 连接、发送、接收、断开、重新连接 的过程。</p>
+<p><img src="doc/screenshot.png" alt="Screenshot"></p>
+<ul>
+<li>在输入框中输入 <code>ws://</code> 地址进行连接。</li>
+<li>然后输入内容并发送，屏幕上会以聊天式气泡显示接收和发送的信息。</li>
+<li>点按右上角连接图标可以连接和断开。</li>
+</ul>
+<p><a href="example/ios">iOS 示例程序</a> | <a href="example/android">Android 示例程序</a></p>
+<h2 id="--more">另请参阅 | More</h2>
+<p><a href="doc/api/index.html">dartdoc</a> | <a href="CHANGELOG.md">更新日志</a></p>
+<h2 id="--license">许可 | LICENSE</h2>
+<ul>
+<li><a href="LICENSE">Code License</a></li>
+<li><a href="https://unsplash.com/license">Icon License</a> : Bradley Jasper Ybanez</li>
+<li><a href="https://github.com/TooTallNate/Java-WebSocket/blob/master/LICENSE">Java-WebSocket License</a></li>
+<li><a href="https://github.com/daltoniam/Starscream/blob/master/LICENSE">Starscream License</a></li>
+</ul>
 </section>
 
 

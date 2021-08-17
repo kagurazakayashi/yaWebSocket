@@ -102,28 +102,27 @@ class YaWebsocket {
     return info;
   }
 
-  /// 连接
-  /// 根据[uri]连接webSocket
+  /// 使用 WebSocket 连接到 [uri] 。
   ///
-  /// String [uri] 连接地址
+  /// 可以单独设置 [tag] 此连接的自定义标记和 [timeout] 超时时间（秒）
   ///
-  /// String? [tag] 此连接的自定义标记
-  ///
-  /// String? [timeout] 超时时间（秒）
+  /// 返回值 ["status"] ：
+  /// 0: 现在开始连接，请等待接口收到 `yaWebsocketDelegateOnOpen` 或 `yaWebsocketDelegateOnClose` 调用后再进行下一步；
+  /// -1: 未能开始连接， ["info"] 提供错误信息描述。
   Future<Map?> connect(String uri,
       {String tag = "", String timeout = "10"}) async {
     _uri = uri;
     _tag = tag;
     final Map? info = await _methodChannel
         .invokeMethod('connect', {'uri': uri, 'timeout': timeout, 'tag': tag});
-    // info: Map<String, String>
-    //   Keys: status(-1/0), info?
     return info;
   }
 
-  /// 发送消息
+  /// 将消息 [text] 发送
   ///
-  /// String? [text] 需发送的消息
+  /// 返回值 ["status"] ：
+  /// 0: 已发送；
+  /// -1: 未发送， ["info"] 提供错误信息描述。
   Future<Map?> send(String? text) async {
     final Map? info = await _methodChannel.invokeMethod('send', {'text': text});
     // info: Map<String, String>
@@ -132,6 +131,10 @@ class YaWebsocket {
   }
 
   /// 关闭连接
+  ///
+  /// 返回值 ["status"] ：
+  /// 0: 关闭成功或已经处于关闭状态，关闭成功接口将收到 `yaWebsocketDelegateOnClose` 调用；
+  /// -1: 遇到问题， ["info"] 提供错误信息描述。
   Future<Map?> close() async {
     final Map? info = await _methodChannel.invokeMethod('close');
     // info: Map<String, String>
@@ -140,6 +143,11 @@ class YaWebsocket {
   }
 
   /// 判断是否正在保持连接
+  ///
+  /// 返回值 ["status"] ：
+  /// 1: 已连接；
+  /// 0: 未连接；
+  /// -1: 未能查询， ["info"] 提供错误信息描述。
   Future<bool> get isOpen async {
     final Map? info = await _methodChannel.invokeMethod('isOpen');
     // info: Map<String, String>

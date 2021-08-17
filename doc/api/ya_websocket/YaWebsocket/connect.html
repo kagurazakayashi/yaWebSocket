@@ -112,11 +112,11 @@
     </section>
     
 <section class="desc markdown">
-  <p>连接
-根据<code>uri</code>连接webSocket</p>
-<p>String <code>uri</code> 连接地址</p>
-<p>String? <code>tag</code> 此连接的自定义标记</p>
-<p>String? <code>timeout</code> 超时时间（秒）</p>
+  <p>使用 WebSocket 连接到 <code>uri</code> 。</p>
+<p>可以单独设置 <code>tag</code> 此连接的自定义标记和 <code>timeout</code> 超时时间（秒）</p>
+<p>返回值 <code>"status"</code> ：
+0: 现在开始连接，请等待接口收到 <code>yaWebsocketDelegateOnOpen</code> 或 <code>yaWebsocketDelegateOnClose</code> 调用后再进行下一步；
+-1: 未能开始连接， <code>"info"</code> 提供错误信息描述。</p>
 </section>
 
 
@@ -129,8 +129,6 @@
   _tag = tag;
   final Map? info = await _methodChannel
       .invokeMethod(&#39;connect&#39;, {&#39;uri&#39;: uri, &#39;timeout&#39;: timeout, &#39;tag&#39;: tag});
-  &#47;&#47; info: Map&lt;String, String&gt;
-  &#47;&#47;   Keys: status(-1&#47;0), info?
   return info;
 }</code></pre>
 </section>
