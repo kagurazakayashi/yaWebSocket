@@ -1,4 +1,4 @@
-![](example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png)
+![](https://github.com/kagurazakayashi/yaWebSocket/raw/main/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png)
 # ya_websocket
 
 一个使用 iOS 和 Android 上原生库进行 WebSocket 通信的 Flutter 插件。
@@ -18,9 +18,10 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
 
 |  平 台  | 可运行最低版本 | 推荐最低版本 |
 | ------- | -------------- | ------------ |
-| Flutter |       2        |     2.2.3    |
-| iOS     |       10       |      14      |
-| Android |       4.1      |      11      |
+| Dart    |     2.12.0     |    2.12.0    |
+| Flutter |     2          |    2.2.2     |
+| iOS     |     10         |    14        |
+| Android |     4.1        |    11        |
 
 在使用本插件前，请先将 APP 的适用版本设置为「可运行最低版本」之上。
 
@@ -47,7 +48,7 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
 
 ## 使用 | Usage
 
-1. 导入包: `import 'package:ya_websocket/main.dart';`
+1. 导入包: `import 'package:ya_websocket/ya_websocket.dart';`
 2. 在需要的类中实现接口 `class ... implements YaWebsocketDelegate`，实现以下接口：
   - 已连接时
     - `yaWebsocketDelegateOnOpen(String httpStatus, String httpStatusMessage, String? tag);`
@@ -116,7 +117,7 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
 
 DEMO 演示了 连接、发送、接收、断开、重新连接 的过程。
 
-![Screenshot](doc/screenshot.png)
+![Screenshot](https://github.com/kagurazakayashi/yaWebSocket/raw/main/doc/screenshot.png)
 
 - 在输入框中输入 `ws://` 地址进行连接。
 - 然后输入内容并发送，屏幕上会以聊天式气泡显示接收和发送的信息。

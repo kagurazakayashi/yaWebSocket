@@ -2,7 +2,6 @@ package moe.yashi.yawebsocket.ya_websocket
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -12,12 +11,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-import org.java_websocket.client.WebSocketClient
-import org.java_websocket.drafts.Draft_6455
-import org.java_websocket.handshake.ServerHandshake
 import java.net.URI
 import java.util.*
-import kotlin.math.log
 
 /** YaWebsocketPlugin */
 class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
@@ -61,10 +56,10 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     }
 
     private fun connect(@NonNull call: MethodCall, @NonNull result: Result) {
-        var returnVal = HashMap<String, String>()
-        var uri: URI = URI.create(call.argument("uri"))
-        var tag: String? = call.argument("tag")
-        var timeout: String? = call.argument("timeout")
+        val returnVal = HashMap<String, String>()
+        val uri: URI = URI.create(call.argument("uri"))
+        val tag: String? = call.argument("tag")
+        val timeout: String? = call.argument("timeout")
         try {
             _webSocket = YWebSocket(uri)
             if (_webSocket == null || _eventChannelSink == null || _webSocket!!.isOpen) {
@@ -87,15 +82,17 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
             toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
-            returnVal["info"] = e.localizedMessage
+            if (e.localizedMessage != null) {
+                returnVal["info"] = e.localizedMessage!!
+            }
             // e.printStackTrace()
             toResult(result, returnVal)
         }
     }
 
     private fun send(@NonNull call: MethodCall, @NonNull result: Result) {
-        var returnVal = HashMap<String, String>()
-        var text: String? = call.argument("text");
+        val returnVal = HashMap<String, String>()
+        val text: String? = call.argument("text")
         if (_webSocket == null || !_webSocket!!.isOpen) {
             toResult(result)
             return
@@ -106,19 +103,23 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
             toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
-            returnVal["info"] = e.localizedMessage
+            if (e.localizedMessage != null) {
+                returnVal["info"] = e.localizedMessage!!
+            }
             toResult(result, returnVal)
         }
     }
 
     private fun close(@NonNull call: MethodCall, @NonNull result: Result) {
-        var returnVal = HashMap<String, String>()
+        val returnVal = HashMap<String, String>()
         if (_webSocket != null || !_webSocket!!.isOpen) {
             try {
                 _webSocket!!.close()
             } catch (e: Exception) {
                 returnVal["status"] = "-1"
-                returnVal["info"] = e.localizedMessage
+                if (e.localizedMessage != null) {
+                    returnVal["info"] = e.localizedMessage!!
+                }
                 toResult(result, returnVal)
                 return
             }
@@ -129,7 +130,7 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     }
 
     private fun isOpen(@NonNull call: MethodCall, @NonNull result: Result) {
-        var returnVal = HashMap<String, String>()
+        val returnVal = HashMap<String, String>()
         try {
             if (_webSocket != null && _webSocket!!.isOpen) {
                 returnVal["status"] = "1"
@@ -139,7 +140,9 @@ class YaWebsocketPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
             toResult(result, returnVal)
         } catch (e: Exception) {
             returnVal["status"] = "-1"
-            returnVal["info"] = e.localizedMessage
+            if (e.localizedMessage != null) {
+                returnVal["info"] = e.localizedMessage!!
+            }
             toResult(result, returnVal)
         }
     }
