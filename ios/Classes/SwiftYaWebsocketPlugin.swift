@@ -55,7 +55,10 @@ public class SwiftYaWebsocketPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             toResult(result: result)
             return
         }
-        webSocket = YaWebSocket(uri: url, eventSink: eventChannelSink!)
+        if (webSocket == nil) {
+            print("webSocket == nil")
+            webSocket = YaWebSocket(eventSink: eventChannelSink!)
+        }
         if (args.keys.contains("timeout")) {
             let timeStr:String = args["timeout"]!
             webSocket!.timeout = TimeInterval(timeStr)!
@@ -65,7 +68,7 @@ public class SwiftYaWebsocketPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             webSocket!.tag = tag
         }
         webSocket!.connecting()
-        webSocket!.connect()
+        webSocket!.connect(uri: url)
         toResult(result: result, returnVal: ["status":"0"])
     }
     
@@ -79,7 +82,10 @@ public class SwiftYaWebsocketPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             toResult(result: result)
             return
         }
-        webSocket!.socket.write(string: text);
+        if (webSocket!.sent(text: text) == false) {
+            toResult(result: result)
+            return
+        }
         toResult(result: result, returnVal: ["status":"0"])
     }
     

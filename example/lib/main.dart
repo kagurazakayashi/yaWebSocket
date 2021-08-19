@@ -23,14 +23,13 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
   List _data = [];
   bool _isConnect = false;
   late YaWebsocket _websocket;
-  String _title = "点按屏幕下方蓝色区域输入";
+  String _title = "点按屏幕下方橙色区域输入";
   ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     initPlatformState().whenComplete(() {});
-    _textFController =
-        TextEditingController(text: '{"sub setpoint":[[1,2,3],[1,3],1]}');
+    _textFController = TextEditingController(text: '');
     _websocket = YaWebsocket();
     _websocket.delegate = this;
     if (_webSocketURI.length > 0) {
@@ -199,19 +198,6 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
           title: Text(_title),
           actions: [
             IconButton(
-              onPressed: () {
-                _textFController.text = 'ws://192.168.1.46:8866/chat?user_id=1';
-              },
-              icon: Icon(Icons.copy),
-            ),
-            IconButton(
-              onPressed: () {
-                _textFController.text = '{"user_id":2,"data":"haha"}';
-                // _textFController.text = '{"sub setpoint":[[1,2,3],[1,3],1]}';
-              },
-              icon: Icon(Icons.copy),
-            ),
-            IconButton(
               onPressed: () async {
                 if (await _websocket.isOpen) {
                   close();
@@ -283,6 +269,12 @@ class _MyAppState extends State<MyApp> implements YaWebsocketDelegate {
                         _textFController.text = "";
                       },
                     ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _textFController.text = '';
+                    },
+                    icon: Icon(Icons.clear, color: Colors.white),
                   ),
                   IconButton(
                     onPressed: () {

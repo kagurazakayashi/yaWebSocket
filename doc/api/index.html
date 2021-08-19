@@ -71,7 +71,7 @@
 <h2 id="--acknowledgements">感谢这些好用的库 | Acknowledgements</h2>
 <table><thead><tr><th>平 台</th><th>Flutter 插件语言</th><th>原生端使用的库</th><th>库版本</th><th>库使用的语言</th></tr></thead><tbody><tr><td>iOS</td><td>Kotlin</td><td><a href="https://github.com/TooTallNate/Java-WebSocket">Java-WebSocket</a></td><td>1.5.2</td><td>Java</td></tr><tr><td>Android</td><td>Swift</td><td><a href="https://github.com/daltoniam/Starscream">Starscream</a></td><td>4.0.4</td><td>Swift</td></tr></tbody></table>
 <h2 id="--supported-platforms">系统版本要求 | Supported platforms</h2>
-<table><thead><tr><th>平 台</th><th>可运行最低版本</th><th>推荐最低版本</th></tr></thead><tbody><tr><td>Dart</td><td>2.12.0</td><td>2.12.0</td></tr><tr><td>Flutter</td><td>2</td><td>2.2.2</td></tr><tr><td>iOS</td><td>10</td><td>14</td></tr><tr><td>Android</td><td>4.1</td><td>11</td></tr></tbody></table>
+<table><thead><tr><th>平 台</th><th>可运行最低版本</th><th>推荐最低版本</th></tr></thead><tbody><tr><td>Dart</td><td>2.12.0</td><td>2.13.4</td></tr><tr><td>Flutter</td><td>2</td><td>2.2.3</td></tr><tr><td>iOS</td><td>10</td><td>14</td></tr><tr><td>Android</td><td>4.1</td><td>11</td></tr></tbody></table>
 <p>在使用本插件前，请先将 APP 的适用版本设置为「可运行最低版本」之上。</p>
 <h2 id="--installing">引入 | Installing</h2>
 <ul>
@@ -162,6 +162,13 @@
 </li>
 </ul>
 </li>
+<li>通常情况下的状态代码( <code>code</code> )
+<ul>
+<li><code>-1</code> 表示操作失败/不正常</li>
+<li><code>0</code> 表示正常/正常地处于关闭状态</li>
+<li><code>1</code> 表示正常/正常地处于开启状态</li>
+</ul>
+</li>
 </ul>
 <ol start="3">
 <li>创建对象: <code>YaWebsocket websocket = YaWebsocket();</code></li>
@@ -241,14 +248,19 @@
 </ul>
 </li>
 </ul>
-<p><strong>注</strong>: 执行 <code>websocket.*</code> 时会立即有返回值，该返回值通常只表示是否成功开始执行。真正的运行结果状态回调在 <code>YaWebsocketDelegate</code> 。</p>
+<h3 id="--note">注意事项 | NOTE</h3>
+<ol>
+<li>执行 <code>websocket.*</code> 时会立即有返回值，该返回值通常只表示是否成功开始执行。真正的运行结果状态回调在 <code>YaWebsocketDelegate</code> 。</li>
+<li>正在进行操作时（如正在连接、正在断开链接时）不要进行操作，尤其是重复的连接和断开操作，请等到收到状态回调后再进行下一步操作。</li>
+<li>连接关闭的回调 <code>yaWebsocketDelegateOnClose</code> 会在每次连接关闭时触发，而错误回调 <code>yaWebsocketDelegateOnError</code> 仅在识别到错误时触发。如果因错误断开，<code>yaWebsocketDelegateOnError</code> 和 <code>yaWebsocketDelegateOnClose</code> 都会触发。因此建议在 <code>yaWebsocketDelegateOnClose</code> 中判断连接关闭。</li>
+</ol>
 <h2 id="--example-app">示例程序 | Example app</h2>
 <p>DEMO 演示了 连接、发送、接收、断开、重新连接 的过程。</p>
 <p><img src="https://github.com/kagurazakayashi/yaWebSocket/raw/main/doc/screenshot.png" alt="Screenshot"></p>
 <ul>
 <li>在输入框中输入 <code>ws://</code> 地址进行连接。</li>
 <li>然后输入内容并发送，屏幕上会以聊天式气泡显示接收和发送的信息。</li>
-<li>点按右上角连接图标可以连接和断开。</li>
+<li>点按右上角连接图标可以连接和断开，请在当前连接或断开操作完成或超时后再按。</li>
 </ul>
 <p><a href="example/ios">iOS 示例程序</a> | <a href="example/android">Android 示例程序</a></p>
 <h2 id="--more">另请参阅 | More</h2>
@@ -286,7 +298,7 @@
 <footer>
   <span class="no-break">
     ya_websocket
-      1.0.1
+      1.0.2
   </span>
 
   

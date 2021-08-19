@@ -18,8 +18,8 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
 
 |  平 台  | 可运行最低版本 | 推荐最低版本 |
 | ------- | -------------- | ------------ |
-| Dart    |     2.12.0     |    2.12.0    |
-| Flutter |     2          |    2.2.2     |
+| Dart    |     2.12.0     |    2.13.4    |
+| Flutter |     2          |    2.2.3     |
 | iOS     |     10         |    14        |
 | Android |     4.1        |    11        |
 
@@ -78,6 +78,10 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
       - `localizedMessage`: 本地化描述文本
       - `message`: 描述文本
       - `tag`: 自定义标记
+  - 通常情况下的状态代码( `code` )
+    - `-1` 表示操作失败/不正常
+    - `0` 表示正常/正常地处于关闭状态
+    - `1` 表示正常/正常地处于开启状态
 3. 创建对象: `YaWebsocket websocket = YaWebsocket();`
 4. 指定接口实现类: `_websocket.delegate = this;`
 5. 开始连接: `websocket.connect(uri, tag: tag);`
@@ -111,7 +115,11 @@ Flutter plugin for WebSocket communication using native libraries on iOS and And
       - `-1`: 遇到问题
     - `info`: （可选）如果遇到问题，可能提供此错误信息描述
 
-**注**: 执行 `websocket.*` 时会立即有返回值，该返回值通常只表示是否成功开始执行。真正的运行结果状态回调在 `YaWebsocketDelegate` 。
+### 注意事项 | NOTE
+
+1. 执行 `websocket.*` 时会立即有返回值，该返回值通常只表示是否成功开始执行。真正的运行结果状态回调在 `YaWebsocketDelegate` 。
+2. 正在进行操作时（如正在连接、正在断开链接时）不要进行操作，尤其是重复的连接和断开操作，请等到收到状态回调后再进行下一步操作。
+3. 连接关闭的回调 `yaWebsocketDelegateOnClose` 会在每次连接关闭时触发，而错误回调 `yaWebsocketDelegateOnError` 仅在识别到错误时触发。如果因错误断开，`yaWebsocketDelegateOnError` 和 `yaWebsocketDelegateOnClose` 都会触发。因此建议在 `yaWebsocketDelegateOnClose` 中判断连接关闭。
 
 ## 示例程序 | Example app
 
@@ -121,7 +129,7 @@ DEMO 演示了 连接、发送、接收、断开、重新连接 的过程。
 
 - 在输入框中输入 `ws://` 地址进行连接。
 - 然后输入内容并发送，屏幕上会以聊天式气泡显示接收和发送的信息。
-- 点按右上角连接图标可以连接和断开。
+- 点按右上角连接图标可以连接和断开，请在当前连接或断开操作完成或超时后再按。
 
 [iOS 示例程序](example/ios) | [Android 示例程序](example/android)
 
